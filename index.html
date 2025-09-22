@@ -3,21 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ERYX Admin test</title>
+  <title>ERYX Admin Test</title>
   <style>
     body, html {
       margin: 0;
       padding: 0;
       height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: white;
     }
+
+    /* Fullscreen button */
+    #fullscreenBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      padding: 8px 14px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid white;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+      font-size: 14px;
+    }
+    #fullscreenBtn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     iframe {
       width: 100%;
-      height: 100vh; /* full screen */
+      height: 100%;
       border: none;
+      display: none; /* hidden until loaded */
+    }
+
+    /* Loading screen */
+    #loader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: black;
+      z-index: 500;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .spinner {
+      border: 5px solid #333;
+      border-top: 5px solid #00ffcc;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-right: 15px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <iframe src="https://eryx-vert.vercel.app/chat" title="ERYX Chat"></iframe>
+  <div id="loader">
+    <div class="spinner"></div> Loading ERYX Chat...
+  </div>
+
+  <iframe id="mainFrame" src="https://eryx-vert.vercel.app/chat" title="ERYX Chat"></iframe>
+
+  <button id="fullscreenBtn">⛶ Fullscreen</button>
+
+  <script>
+    const iframe = document.getElementById("mainFrame");
+    const loader = document.getElementById("loader");
+
+    // Hide loader when iframe is loaded
+    iframe.onload = () => {
+      loader.style.display = "none";
+      iframe.style.display = "block";
+    };
+
+    // Fullscreen function
+    document.getElementById("fullscreenBtn").addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Console secret code system
+    window.admin = function() {
+      iframe.src = "https://eryx-vert.vercel.app/admin";
+      console.log("%c✔ Switched to ADMIN mode", "color: lime; font-weight: bold;");
+    };
+
+    console.log("%cType admin() in console to open ADMIN mode", "color: cyan; font-weight: bold;");
+  </script>
 </body>
 </html>
